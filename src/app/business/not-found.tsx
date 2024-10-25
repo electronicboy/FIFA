@@ -1,9 +1,7 @@
 import React from 'react'
 
-type Props = {}
-
-export default function not-found({}: Props) {
+export default function page() {
   return (
-    <div>not-found</div>
+    <div>page</div>
   )
 }
