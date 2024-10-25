@@ -1,9 +1,7 @@
 import React from 'react'
 
-type Props = {}
-
-const not-found = (props: Props) => {
+export default function page() {
   return (
-    <div>not-found</div>
+    <div>page</div>
   )
 }
