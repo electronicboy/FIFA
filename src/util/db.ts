@@ -1,5 +1,4 @@
 import  {Pool} from "pg";
-import {number, string} from "prop-types";
 
 let pool: Pool|null;
 
