@@ -33,7 +33,6 @@ export type Business = {
 }
 
 export type Category = {
-    id: number,
     name: string,
     // TODO: add these?
     thumbnail?: string,
@@ -42,13 +41,11 @@ export type Category = {
 
 // TODO: Refactor this type
 export type City = {
-    id: number,
     name: string,
     country: string,
 }
 
 export type Review = {
-    id: number,
     business: number,
     user: number,
     comment: string,
