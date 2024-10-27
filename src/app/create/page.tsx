@@ -1,7 +1,11 @@
 import React from 'react'
+import {Button, HStack} from "@chakra-ui/react";
 
 export default function page() {
   return (
-    <div>page</div>
+      <HStack>
+        <Button>Click me</Button>
+        <Button>Click me</Button>
+      </HStack>
   )
 }
