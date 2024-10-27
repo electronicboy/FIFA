@@ -85,22 +85,40 @@ fun main() {
     val fin = AtomicInteger(0)
     val execPool = Executors.newFixedThreadPool(2);
 
-    val cities = HashSet<String>()
 
     places.forEach {
         run {
 
             pool.connection.use { conn ->
                 try {
-                    conn.prepareStatement("INSERT INTO biz_cities(name, country) VALUES (?, ?) ON CONFLICT DO NOTHING").use { stmt ->
-                        stmt.setString(1, it.value.city)
-                        stmt.setString(2, it.value.country)
-                        stmt.executeUpdate()
-                    }
+                    conn.prepareStatement("INSERT INTO biz_cities(name, country) VALUES (?, ?) ON CONFLICT DO NOTHING")
+                        .use { stmt ->
+                            stmt.setString(1, it.value.city)
+                            stmt.setString(2, it.value.country)
+                            stmt.executeUpdate()
+                        }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
+
+                try {
+                    conn.prepareStatement("INSERT INTO biz_category (name) VALUES (?) ON CONFLICT DO NOTHING")
+                        .use { stmt ->
+                            it.value.subtypes.forEach { subtype ->
+                                stmt.setString(1, subtype)
+                                stmt.executeUpdate()
+                            }
+
+                            stmt.setString(1, it.value.type)
+                            stmt.executeUpdate()
+                        }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
             }
+
+
         }
     }
 
@@ -109,64 +127,87 @@ fun main() {
             val future = CompletableFuture.runAsync(object : Runnable {
                 override fun run() {
                     pool.connection.use { conn ->
-                    try {
+                        try {
 
-                        var bizId: Int? = null;
-                        conn.prepareStatement("SELECT id FROM biz_businesses WHERE business_id = ?").use { stmt ->
-                            stmt.setString(1, it.key)
-                            stmt.executeQuery().use { rs ->
-                                if (rs.next()) {
-                                    bizId = rs.getInt("id")
+                            var bizId: Int? = null;
+                            conn.prepareStatement("SELECT id FROM biz_businesses WHERE business_id = ?").use { stmt ->
+                                stmt.setString(1, it.key)
+                                stmt.executeQuery().use { rs ->
+                                    if (rs.next()) {
+                                        bizId = rs.getInt("id")
+                                    }
                                 }
                             }
-                        }
 
-                        println("Processing ${it.key}")
+                            println("Processing ${it.key}")
 
-                        if (bizId == null) {
-                            conn.prepareStatement(
-                                """INSERT INTO biz_businesses(name, location, website, phone, logo, image_thumb, image_large, business_id, longitude, latitude, street_address, zipcode, city, hours) 
-                                |VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT biz_cities.id FROM biz_cities WHERE biz_cities.name = ? AND biz_cities.country = ?), ?)""".trimMargin()
-                            )
-                                .use { stmt ->
-                                    // name
-                                    stmt.setString(1, it.value.name)
-                                    // location
-                                    stmt.setString(2, it.value.full_address)
-                                    // website
-                                    stmt.setString(3, it.value.website)
-                                    // phone
-                                    stmt.setString(4, it.value.phone)
-                                    // logo
-                                    stmt.setString(5, it.value.photosSample?.get(0)?.photo_url)
-                                    // image_thumb
-                                    stmt.setString(6, it.value.photosSample?.get(0)?.photo_url)
-                                    // image_large
-                                    stmt.setString(7, it.value.photosSample?.get(0)?.photo_url_large)
-                                    // business_id
-                                    stmt.setString(8, it.value.businessId)
-                                    // long
-                                    stmt.setDouble(9, it.value.longitude)
-                                    // lat
-                                    stmt.setDouble(10, it.value.latitude)
-                                    // street_address
-                                    stmt.setString(11, it.value.streetAddress)
-                                    // zipcode
-                                    stmt.setString(12, it.value.zipcode)
-                                    // city
-                                    stmt.setString(13, it.value.city)
-                                    // country
-                                    stmt.setString(14, it.value.country)
-                                    // hours
-                                    stmt.setObject(15, it.value.workingHours.toString(), java.sql.Types.OTHER)
+                            if (bizId == null) {
+                                conn.prepareStatement(
+                                    """INSERT INTO biz_businesses(name, location, website, phone, logo, image_thumb, image_large, business_id, longitude, latitude, street_address, zipcode, city, hours) 
+                                |VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT biz_cities.id FROM biz_cities WHERE biz_cities.name = ? AND biz_cities.country = ?), ?) RETURNING id""".trimMargin()
+                                )
+                                    .use { stmt ->
+                                        // name
+                                        stmt.setString(1, it.value.name)
+                                        // location
+                                        stmt.setString(2, it.value.full_address)
+                                        // website
+                                        stmt.setString(3, it.value.website)
+                                        // phone
+                                        stmt.setString(4, it.value.phone)
+                                        // logo
+                                        stmt.setString(5, it.value.photosSample?.get(0)?.photo_url)
+                                        // image_thumb
+                                        stmt.setString(6, it.value.photosSample?.get(0)?.photo_url)
+                                        // image_large
+                                        stmt.setString(7, it.value.photosSample?.get(0)?.photo_url_large)
+                                        // business_id
+                                        stmt.setString(8, it.value.businessId)
+                                        // long
+                                        stmt.setDouble(9, it.value.longitude)
+                                        // lat
+                                        stmt.setDouble(10, it.value.latitude)
+                                        // street_address
+                                        stmt.setString(11, it.value.streetAddress)
+                                        // zipcode
+                                        stmt.setString(12, it.value.zipcode)
+                                        // city
+                                        stmt.setString(13, it.value.city)
+                                        // country
+                                        stmt.setString(14, it.value.country)
+                                        // hours
+                                        stmt.setObject(15, it.value.workingHours.toString(), java.sql.Types.OTHER)
+                                        stmt.executeQuery().use { rs ->
+                                            if (rs.next()) {
+                                                bizId = rs.getInt("id")
+                                            }
+                                        }
+
+                                    }
+                            }
+
+                            if (bizId != null) {
+                                conn.prepareStatement("DELETE FROM biz_business_category WHERE business = ?").use { stmt ->
+                                    stmt.setInt(1, bizId!!)
                                     stmt.executeUpdate()
-
                                 }
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
 
-                    }
+                                conn.prepareStatement("INSERT INTO biz_business_category(business, category) VALUES (?, (SELECT id FROM biz_category WHERE name = ?)) ON CONFLICT DO NOTHING").use { stmt ->
+                                    it.value.subtypes.forEach { subtype ->
+                                        stmt.setInt(1, bizId!!)
+                                        stmt.setString(2, subtype)
+                                        stmt.executeUpdate()
+                                    }
+
+                                    stmt.setInt(1, bizId!!)
+                                    stmt.setString(2, it.value.type)
+                                    stmt.executeUpdate()
+                                }
+                            }
+
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
 
                     fin.incrementAndGet()
