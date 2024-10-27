@@ -74,7 +74,9 @@ fun main() {
                 val placeData = json.decodeFromString<APIResponse>(file.readText())
                 placeData.data.forEach { place: PlaceData ->
                     run {
-                        places[place.businessId] = place
+                        if (place.streetAddress != null && place.city != null && place.country != null) {
+                            places[place.businessId] = place
+                        }
                     }
                 }
             }
@@ -150,7 +152,7 @@ fun main() {
                                         // name
                                         stmt.setString(1, it.value.name)
                                         // location
-                                        stmt.setString(2, it.value.full_address)
+                                        stmt.setString(2, it.value.fullAddress)
                                         // website
                                         stmt.setString(3, it.value.website)
                                         // phone
@@ -239,21 +241,22 @@ data class PlaceData(
     // name
     val name: String,
     // location
-    val full_address: String,
+    @SerialName("full_address")
+    val fullAddress: String?,
     // website
     val website: String?,
     // phone
-    @SerialName("phone_number") val phone: String?,
+    @SerialName("phone_number") val phone: String? = null,
     // logo - image_thumb, image_large
     @SerialName("photos_sample") val photosSample: Array<PhotoSample>?,
     // working_hours - This is a fairly questionable field, but it's a JSON object with keys as days of the week and values as working hours
     @SerialName("working_hours") val workingHours: JsonObject?,
     val latitude: Double,
     val longitude: Double,
-    @SerialName("street_address") val streetAddress: String,
-    val city: String,
-    val zipcode: String,
-    val country: String,
+    @SerialName("street_address") val streetAddress: String?,
+    val city: String?, // stupid places in the API...
+    val zipcode: String?, // stupid places in the API...
+    val country: String?, // stupid places in the API...
     val type: String,
     val subtypes: Array<String>
 )
