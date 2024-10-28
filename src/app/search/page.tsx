@@ -20,7 +20,6 @@ export default async function Page({searchParams}: {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const pageNum = resolvedSearch.page != null && !isNaN(Number(resolvedSearch.page)) ? Number(resolvedSearch.page) : 1;
 
-        console.log(resolvedSearch);
         let hasInjectedWhere = false;
         const queryParams = [];
         /* language=PostgreSQL */
@@ -42,8 +41,6 @@ export default async function Page({searchParams}: {
             }
             queryParams.push(locationIds);
         }
-        console.log(sql);
-        console.log(queryParams);
 
         const searchRes = await db().query(sql, queryParams);
 
