@@ -1,10 +1,15 @@
 "use client";
 import {ChangeEvent, useState} from "react";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {Button} from "@/components/ui/button";
 
 export default function SearchComponentBox({locations, categories}: {
     locations: Array<{ id: number, location_name: string, country: string }>,
     categories: Array<{ id: number, name: string }>
 }) {
+    const router = useRouter();
+    const path = usePathname();
+    const currentQuery = useSearchParams();
     const [selectedLocations, setselectedLocations] = useState<Array<number>>([]);
     const [selectedCategories, setselectedCategories] = useState<Array<number>>([]);
 
@@ -54,8 +59,22 @@ export default function SearchComponentBox({locations, categories}: {
         }
     }
 
+    function handleNavigate() {
+        const searchParams = new URLSearchParams();
+        currentQuery.entries().forEach((item) => {
+            searchParams.set(item[0], item[1]);
+        });
+
+        searchParams.set("location", selectedLocations.join(','))
+        searchParams.set("category", selectedCategories.join(','))
+        searchParams.set("page", "1")
+
+        router.push(`${path}?${searchParams.toString()}`);
+    }
+
     return (
         <>
+            <Button onClick={handleNavigate}>Filter</Button>
             <form action={"#"}>
                 <div>Locations</div>
                 {locations.map(location => (

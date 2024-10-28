@@ -15,8 +15,8 @@ export default async function Page({searchParams}: {
 }) {
     const resolvedSearch = await searchParams;
     try {
-        const categoryIds = resolvedSearch.category != null ? mapToNumeric(resolvedSearch.category.split(',')) : null;
-        const locationIds = resolvedSearch.location != null ? mapToNumeric(resolvedSearch.location.split(',')) : null;
+        const categoryIds = resolvedSearch.category != null && resolvedSearch.category.length > 0 ? mapToNumeric(resolvedSearch.category.split(',')) : null;
+        const locationIds = resolvedSearch.location != null && resolvedSearch.location.length > 0 ? mapToNumeric(resolvedSearch.location.split(',')) : null;
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const pageNum = resolvedSearch.page != null && !isNaN(Number(resolvedSearch.page)) ? Number(resolvedSearch.page) : 1;
@@ -29,7 +29,7 @@ export default async function Page({searchParams}: {
                             INNER JOIN biz_locations ON business.city = biz_locations.id`;
 
         if (categoryIds != null) {
-            sql += `RIGHT JOIN public.biz_business_category bbc on business.id = bbc.business WHERE bbc.category = ANY($1::int[])`;
+            sql += ` RIGHT JOIN public.biz_business_category bbc on business.id = bbc.business WHERE bbc.category = ANY($1::int[])`;
             queryParams.push(categoryIds);
             hasInjectedWhere = true;
         }

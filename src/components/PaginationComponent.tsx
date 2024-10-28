@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import {HStack} from "@chakra-ui/react";
 import {
     PaginationItems,
@@ -16,11 +16,11 @@ export default function PaginationComponent({itemCount, itemsPerPage}: { itemCou
     const currentQuery = useSearchParams();
 
     function handlePageChange(details: PageChangeDetails) {
-        const searchParams = new URLSearchParams()
+        const searchParams = new URLSearchParams();
         currentQuery.entries().forEach((item) => {
-            searchParams.set(item[0], item[1])
-        })
-        searchParams.set("page", details.page.toString())
+            searchParams.set(item[0], item[1]);
+        });
+        searchParams.set("page", details.page.toString());
 
         router.push(`${path}?${searchParams.toString()}`);
     }
