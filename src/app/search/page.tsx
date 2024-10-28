@@ -3,6 +3,7 @@ import {db} from "@/util/db";
 import SearchComponentBox from "@/components/SearchComponentBox";
 import {mapToNumeric} from "@/util/ArrayUtils";
 import BusinessEntryList from "@/components/BusinessEntryList";
+import PaginationComponent from "@/components/PaginationComponent";
 
 export default async function Page({searchParams}: {
     searchParams: Promise<{
@@ -52,15 +53,18 @@ export default async function Page({searchParams}: {
         const categories = await db().query<{ id: number, name: string }>("SELECT id, name FROM biz_category");
 
 
-        const results = searchRes.rows.slice(0, 10)
-        console.log(searchRes.rows);
+        const startPos = (pageNum - 1) * 10;
+        const results = searchRes.rows.slice(startPos, startPos + 10)
 
 
         return (
             <div>
                 <div className={"flex flex-row"}>
                     <div><SearchComponentBox locations={locations.rows} categories={categories.rows}/></div>
-                    <div><BusinessEntryList entries={results} /></div>
+                    <div>
+                        <BusinessEntryList entries={results} />
+                        <PaginationComponent itemCount={searchRes.rows.length} itemsPerPage={10} />
+                    </div>
                 </div>
             </div>
         );
