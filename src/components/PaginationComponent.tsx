@@ -14,8 +14,8 @@ export default function PaginationComponent({itemCount, itemsPerPage}: { itemCou
     const router = useRouter();
     const path = usePathname();
     const currentQuery = useSearchParams();
+
     function handlePageChange(details: PageChangeDetails) {
-        console.log("handlePageChange", details);
         const searchParams = new URLSearchParams()
         currentQuery.entries().forEach((item) => {
             searchParams.set(item[0], item[1])
