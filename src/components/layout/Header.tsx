@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, {FormEvent} from "react";
 import { Image, Link } from "@chakra-ui/react";
 import MobileMenu from "./MobileMenu";
 import {
@@ -9,8 +9,22 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import {redirect, useSearchParams} from "next/navigation";
 
 export default function Header() {
+  const searchParams = useSearchParams();
+
+  function handleSearch(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    console.log("handleSearch", e);
+    const formData = new FormData(e.target)
+    const query = formData.get("query");
+    if (query != null && query.length > 0) {
+      redirect("/search?query=" + encodeURIComponent(query));
+    }
+
+  }
+
   return (
     <div className="h-24 flex items-center justify-between">
       {/* LEFT */}
@@ -33,7 +47,7 @@ export default function Header() {
             />
             <span>Home</span>
           </Link>
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/about" className="flex items-center gap-2">
             <Image
               src="/about.png"
               alt="About"
@@ -55,11 +69,15 @@ export default function Header() {
           </Link>
         </div>
         <div className="hidden xl:flex p-2 bg-slate-100 items-center rounded-xl">
+          <form onSubmit={handleSearch}>
           <input
             type="text"
+            name="query"
+            defaultValue={searchParams.get('query') != null ? decodeURIComponent(searchParams.get('query')) : null}
             placeholder="search..."
             className="bg-transparent outline-none"
           />
+          </form>
           <Image src="/search.png" alt="" width={5} height={5} />
         </div>
       </div>

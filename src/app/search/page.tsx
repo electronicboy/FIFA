@@ -4,6 +4,7 @@ import SearchComponentBox from "@/components/SearchComponentBox";
 import {mapToNumeric} from "@/util/ArrayUtils";
 import BusinessEntryList from "@/components/BusinessEntryList";
 import PaginationComponent from "@/components/PaginationComponent";
+import {query} from "@zag-js/dom-query";
 
 export default async function Page({searchParams}: {
     searchParams: Promise<{
@@ -24,7 +25,22 @@ export default async function Page({searchParams}: {
         let hasInjectedWhere = false;
         const queryParams = [];
         /* language=PostgreSQL */
-        let sql = `SELECT business.id, name, location, website, phone, logo, image_thumb, image_large, business_id, longitude, latitude, street_address, zipcode, hours, location, city as city_id
+        let sql = `SELECT business.id,
+                          name,
+                          location,
+                          website,
+                          phone,
+                          logo,
+                          image_thumb,
+                          image_large,
+                          business_id,
+                          longitude,
+                          latitude,
+                          street_address,
+                          zipcode,
+                          hours,
+                          location,
+                          city as city_id
                    FROM biz_businesses business
                             INNER JOIN biz_locations ON business.city = biz_locations.id`;
 
@@ -41,6 +57,16 @@ export default async function Page({searchParams}: {
                 sql += ` WHERE city = ANY($1::int[])`;
             }
             queryParams.push(locationIds);
+
+        }
+
+        if (resolvedSearch.query != null) {
+            if (!hasInjectedWhere) {
+                sql += ` WHERE `;
+            }
+
+            sql += `name LIKE $${queryParams.length + 1}`;
+            queryParams.push(`%${resolvedSearch.query}%`);
         }
 
         const searchRes = await db().query(sql, queryParams);
@@ -54,7 +80,7 @@ export default async function Page({searchParams}: {
 
 
         const startPos = (pageNum - 1) * 10;
-        const results = searchRes.rows.slice(startPos, startPos + 10)
+        const results = searchRes.rows.slice(startPos, startPos + 10);
 
 
         return (
@@ -62,8 +88,8 @@ export default async function Page({searchParams}: {
                 <div className={"flex flex-row"}>
                     <div><SearchComponentBox locations={locations.rows} categories={categories.rows}/></div>
                     <div>
-                        <BusinessEntryList entries={results} />
-                        <PaginationComponent itemCount={searchRes.rows.length} itemsPerPage={10} />
+                        <BusinessEntryList entries={results}/>
+                        <PaginationComponent itemCount={searchRes.rows.length} itemsPerPage={10}/>
                     </div>
                 </div>
             </div>
