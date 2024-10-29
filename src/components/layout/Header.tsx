@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, {FormEvent, Suspense} from "react";
 import { Image, Link } from "@chakra-ui/react";
 import MobileMenu from "./MobileMenu";
 import {
@@ -9,10 +9,38 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import {redirect, useSearchParams} from "next/navigation";
+
+export function Search() {
+  const searchParams = useSearchParams();
+
+  function handleSearch(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const query = formData.get("query") as string;
+    if (query != null && query.length > 0) {
+      redirect("/search?query=" + encodeURIComponent(query));
+    }
+  }
+
+  return (<>
+  <form onSubmit={handleSearch}>
+    <input
+        type="text"
+        name="query"
+        defaultValue={searchParams.get('query') != null ? decodeURIComponent(searchParams.get('query')!) : undefined}
+        placeholder="search..."
+        className="bg-transparent outline-none"
+    />
+  </form>;
+  <Image src="/search.png" alt="" width={5} height={5}/>
+  </>)
+}
 
 export default function Header() {
+
   return (
-    <div className="h-24 flex items-center justify-between">
+      <div className="h-24 flex items-center justify-between">
       {/* LEFT */}
       <div className="md:hidden lg:block w-[20%]">
         <Link href="/" className="font-bold text-xl text-blue-600">
@@ -33,7 +61,7 @@ export default function Header() {
             />
             <span>Home</span>
           </Link>
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/about" className="flex items-center gap-2">
             <Image
               src="/about.png"
               alt="About"
@@ -43,7 +71,7 @@ export default function Header() {
             />
             <span>About</span>
           </Link>
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/search" className="flex items-center gap-2">
             <Image
               src="/business.png"
               alt="Business"
@@ -55,12 +83,10 @@ export default function Header() {
           </Link>
         </div>
         <div className="hidden xl:flex p-2 bg-slate-100 items-center rounded-xl">
-          <input
-            type="text"
-            placeholder="search..."
-            className="bg-transparent outline-none"
-          />
-          <Image src="/search.png" alt="" width={5} height={5} />
+          <Suspense>
+            <Search />
+          </Suspense>
+
         </div>
       </div>
       {/* RIGHT */}
