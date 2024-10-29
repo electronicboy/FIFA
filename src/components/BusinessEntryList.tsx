@@ -1,7 +1,7 @@
-import {Business, City} from "@/util/db";
+import {Business, Location} from "@/util/db";
 import BusinessEntry from "@/components/cards/BusinessEntry";
 
-export default function BusinessEntryList({entries}: { entries: (Business & City)[] }) {
+export default function BusinessEntryList({entries}: { entries: (Business & Location)[] }) {
     return (
         <>
             {entries.map(business => (
