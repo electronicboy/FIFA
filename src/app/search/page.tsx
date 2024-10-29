@@ -4,7 +4,6 @@ import SearchComponentBox from "@/components/SearchComponentBox";
 import {mapToNumeric} from "@/util/ArrayUtils";
 import BusinessEntryList from "@/components/BusinessEntryList";
 import PaginationComponent from "@/components/PaginationComponent";
-import {query} from "@zag-js/dom-query";
 
 export default async function Page({searchParams}: {
     searchParams: Promise<{
@@ -96,5 +95,6 @@ export default async function Page({searchParams}: {
         );
     } catch (error) {
         console.error(error);
+        throw error; // Rethrow so it can be caught by the error page
     }
 }
