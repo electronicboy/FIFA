@@ -72,7 +72,7 @@ export default function Header() {
           <input
             type="text"
             name="query"
-            defaultValue={searchParams.get('query') != null ? decodeURIComponent(searchParams.get('query')) : null}
+            defaultValue={searchParams.get('query') != null ? decodeURIComponent(searchParams.get('query')) : undefined}
             placeholder="search..."
             className="bg-transparent outline-none"
           />
