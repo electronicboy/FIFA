@@ -67,7 +67,7 @@ export default function Header() {
         </div>
       </div>
       {/* RIGHT */}
-      <div className="w-[30%] flex items-center gap-4 xl:gap-8 justify-end">
+      <div className="w-[30%] flex items-center gap-1 md:gap-4 lg:gap-6 xl:gap-8 justify-end">
         <ClerkLoading>
           <div className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-gray-500 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white" />
         </ClerkLoading>
