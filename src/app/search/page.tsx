@@ -64,8 +64,8 @@ export default async function Page({searchParams}: {
                 sql += ` WHERE `;
             }
 
-            sql += `name LIKE $${queryParams.length + 1}`;
-            queryParams.push(`%${resolvedSearch.query}%`);
+            sql += `lower(name) LIKE $${queryParams.length + 1}`;
+            queryParams.push(`%${resolvedSearch.query.toLowerCase()}%`);
         }
 
         const searchRes = await db().query(sql, queryParams);
