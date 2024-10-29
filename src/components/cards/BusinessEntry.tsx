@@ -1,11 +1,11 @@
-import {Business, City} from "@/util/db";
+import {Business, Location} from "@/util/db";
 import {Box, Card, CardRoot} from "@chakra-ui/react";
 import Image from "next/image";
 import StoreFront from '@/../public/StoreFront.webp';
 import {redirect} from "next/navigation";
 
 
-export default function BusinessEntry({business}: { business: Business & City }) {
+export default function BusinessEntry({business}: { business: Business & Location }) {
 
     const img = business.image_large != null ? business.image_large :
         (business.image_thumb != null ? business.image_thumb :
