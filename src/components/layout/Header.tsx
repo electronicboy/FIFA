@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import ReactDOM from "react-dom";
-import { Center, Image, Link } from "@chakra-ui/react";
+import { Image, Link } from "@chakra-ui/react";
 import MobileMenu from "./MobileMenu";
 import {
   ClerkLoaded,
@@ -12,8 +11,6 @@ import {
 } from "@clerk/nextjs";
 
 export default function Header() {
-  const [isOpen, setOpen] = React.useState(false);
-
   return (
     <div className="h-24 flex items-center justify-between">
       {/* LEFT */}
