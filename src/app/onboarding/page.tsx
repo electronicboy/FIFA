@@ -12,7 +12,6 @@ export default async function OnboardingPage({searchParams}: { searchParams: Pro
 
         const {userId} = await auth();
 
-        console.log(userId);
         if (userId == null) {
             return {success: false, error: "You are not logged in"};
         }
