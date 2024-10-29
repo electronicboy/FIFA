@@ -33,12 +33,10 @@ export type Business = {
 
 export type Category = {
     name: string,
-    // TODO: add these?
-    thumbnail?: string,
-    banner?: string
+    //thumbnail?: string,
+    //banner?: string
 }
 
-// TODO: Refactor this type
 export type Location = {
     location_name: string,
     country: string,
