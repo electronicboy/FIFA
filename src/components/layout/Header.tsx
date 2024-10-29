@@ -17,7 +17,7 @@ export default function Header() {
   function handleSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const query = formData.get("query");
+    const query = formData.get("query") as string;
     if (query != null && query.length > 0) {
       redirect("/search?query=" + encodeURIComponent(query));
     }
