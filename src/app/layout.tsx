@@ -35,10 +35,10 @@ export default function RootLayout({
       >
         <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
           <Provider>
-            <div className="w-full bg-slate-500 md:px8 lg:px-16 xl:px32 2xl:px64">
+            <div className="w-full light:bg-slate-500 md:px8 lg:px-16 xl:px32 2xl:px64">
               <Header />
             </div>
-            <div className="w-full bg-white px-4 md:px8 lg:px-16 xl:px32 2xl:px64">
+            <div className="w-full light:bg-white px-4 md:px8 lg:px-16 xl:px32 2xl:px64">
               {children}
             </div>
             <Footer />
