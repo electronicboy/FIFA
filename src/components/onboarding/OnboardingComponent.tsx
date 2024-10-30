@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import {Button} from "@/components/ui/button";
-import {Box, Card, CardRoot, Center, Fieldset, Input, Stack} from "@chakra-ui/react";
+import {Box, Card, CardRoot, Fieldset, Input, Stack} from "@chakra-ui/react";
 import {Field} from "@/components/ui/field";
 import {Alert} from "@/components/ui/alert";
 
