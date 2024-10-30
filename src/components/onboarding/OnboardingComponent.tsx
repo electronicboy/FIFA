@@ -1,6 +1,9 @@
 "use client";
 import React from 'react';
 import {Button} from "@/components/ui/button";
+import {Box, Card, CardRoot, Center, Container, Dialog, Fieldset, Input, Stack} from "@chakra-ui/react";
+import {Field} from "@/components/ui/field";
+import {DialogRoot} from "@/components/ui/dialog";
 
 export default function OnboardingComponent({updateAction}: {
     updateAction: (data: FormData) => Promise<{ success: boolean, error?: string }>
@@ -25,11 +28,35 @@ export default function OnboardingComponent({updateAction}: {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label>username</label>
-            <input name="username"/>
-            <Button loading={submitting} variant={"ghost"}>Go!</Button>
-            {error && <span>{error}</span>}
-        </form>
+        <>
+            <Center>
+                <CardRoot size={"md"} maxW={"md"}>
+
+                    <Card.Body>
+                        <Box>
+                            <form onSubmit={handleSubmit}>
+                                <Fieldset.Root size={"lg"} maxW={"md"}>
+                                    <Stack>
+                                        <Fieldset.Legend>Who are you?</Fieldset.Legend>
+                                        <Fieldset.HelperText>
+                                            Please tell us about yourself
+                                        </Fieldset.HelperText>
+                                    </Stack>
+                                    <Fieldset.Content>
+                                        <Field label={"Name"}>
+                                            <Input name={"username"}/>
+                                        </Field>
+                                    </Fieldset.Content>
+
+                                    <Button loading={submitting} type={"submit"} alignSelf={"flex-start"}>Submit</Button>
+                                </Fieldset.Root>
+                                {error && <span>{error}</span>}
+                            </form>
+                        </Box>
+                    </Card.Body>
+                </CardRoot>
+            </Center>
+
+        </>
     );
 }
