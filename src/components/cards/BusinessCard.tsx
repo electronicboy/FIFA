@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, CardHeader, CardFooter, Card, Text, Stack, Image, Badge, HStack } from "@chakra-ui/react";
+import { Button, CardHeader, CardFooter, Card, Text, Stack, Badge } from "@chakra-ui/react";
 import { Business, Hours } from "@/util/db";
 import NextImage from "next/image";
 import StoreFront from "@/../public/StoreFront.webp";
