@@ -33,20 +33,18 @@ export type Business = {
 
 export type Category = {
     name: string,
-    // TODO: add these?
-    thumbnail?: string,
-    banner?: string
+    //thumbnail?: string,
+    //banner?: string
 }
 
-// TODO: Refactor this type
-export type City = {
-    name: string,
+export type Location = {
+    location_name: string,
     country: string,
 }
 
 export type Review = {
     business: number,
-    user: number,
+    userId: number,
     comment: string,
     review: number
 }
