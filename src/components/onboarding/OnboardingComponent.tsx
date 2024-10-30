@@ -3,6 +3,7 @@ import React from 'react';
 import {Button} from "@/components/ui/button";
 import {Box, Card, CardRoot, Center, Fieldset, Input, Stack} from "@chakra-ui/react";
 import {Field} from "@/components/ui/field";
+import {Alert} from "@/components/ui/alert";
 
 export default function OnboardingComponent({updateAction}: {
     updateAction: (data: FormData) => Promise<{ success: boolean, error?: string }>
@@ -28,8 +29,8 @@ export default function OnboardingComponent({updateAction}: {
 
     return (
         <>
-            <Center>
-                <CardRoot size={"md"} maxW={"md"}>
+        <div className={"mx-auto w-fit"}>
+                <CardRoot className={"w-240"}>
 
                     <Card.Body>
                         <Box>
@@ -49,12 +50,16 @@ export default function OnboardingComponent({updateAction}: {
 
                                     <Button loading={submitting} type={"submit"} alignSelf={"flex-start"}>Submit</Button>
                                 </Fieldset.Root>
-                                {error && <span>{error}</span>}
+                                {error && (
+                                    <Alert title={"Invalid submission"} status={"error"}>
+                                        {error}
+                                    </Alert>
+                                )}
                             </form>
                         </Box>
                     </Card.Body>
                 </CardRoot>
-            </Center>
+        </div>
 
         </>
     );
