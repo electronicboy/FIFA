@@ -2,6 +2,7 @@
 import {ChangeEvent, useState} from "react";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Button} from "@/components/ui/button";
+import {Category} from "@/util/db";
 
 export default function SearchComponentBox({locations, categories}: {
     locations: Array<{ id: number, location_name: string, country: string }>,
@@ -72,6 +73,17 @@ export default function SearchComponentBox({locations, categories}: {
         router.push(`${path}?${searchParams.toString()}`);
     }
 
+    const map = new Map<string, Array<Category & {id: number}>>();
+
+    categories.forEach(category => {
+        const initial = category.name.slice(0, 1).toUpperCase();
+        const set = map.get(initial) || new Array<Category & {id: number}>()
+        set.push(category)
+        map.set(initial, set)
+    })
+
+    const sortedCatMap = new Map([...map.entries()].sort());
+
     return (
         <>
             <Button onClick={handleNavigate}>Filter</Button>
@@ -79,15 +91,20 @@ export default function SearchComponentBox({locations, categories}: {
                 <div>Locations</div>
                 {locations.map(location => (
                     <div key={location.id}>
-                        <input type={"checkbox"} value={location.id} onChange={updateSelectedLocations}
-                               checked={selectedLocations.includes(location.id)}></input><label>{location.location_name}, {location.country}</label>
+                        <input id={`loc-${location.id}`} type={"checkbox"} value={location.id} onChange={updateSelectedLocations}
+                               checked={selectedLocations.includes(location.id)}></input><label htmlFor={`loc-${location.id}`}>{location.location_name}, {location.country}</label>
                     </div>
                 ))}
                 <div>Categories</div>
-                {categories.map(category => (
-                    <div key={category.id}>
-                        <input type={"checkbox"} value={category.id} onChange={updateSelectedCategories}
-                               checked={selectedCategories.includes(category.id)}></input><label>{category.name}</label>
+                {Array.from(sortedCatMap.entries()).map(catKey => (
+                    <div key={catKey[0]}>
+                        {catKey[0]}
+                        {catKey[1].sort((a, b) => a.name.localeCompare(b.name)).map(category => (
+                            <div key={category.id}>
+                                <input id={`cat-${category.id}`} type={"checkbox"} value={category.id} onChange={updateSelectedCategories}
+                                       checked={selectedCategories.includes(category.id)}></input><label htmlFor={`cat-${category.id}`}>{category.name}</label>
+                            </div>
+                        ))}
                     </div>
                 ))}
 
