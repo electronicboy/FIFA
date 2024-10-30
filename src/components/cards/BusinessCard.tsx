@@ -18,7 +18,6 @@ export default function BusinessCard({ business }: { business: Business }) {
 
     const isLogo =
         business.logo != null ? <img src={logo} alt={name} /> : <img src="/iconlogo.png" alt="Replacement Icon" />;
-    console.log(hours);
 
     return (
         <Card.Root maxW="xl" overflow="hidden" m={10}>
@@ -45,17 +44,15 @@ export default function BusinessCard({ business }: { business: Business }) {
                 <Text fontWeight="bold" mb="2">
                     Opening Hours:
                 </Text>
-                <Text>
-                    {hours && (
-                        <Stack>
-                            {(Object.keys(hours) as Array<keyof Hours>).map((day) => (
-                                <Text key={day} textStyle="sm" fontWeight="light" letterSpacing="tight">
-                                    {day} {(hours[day] as string[]).map((hour) => hour)}
-                                </Text>
-                            ))}
-                        </Stack>
-                    )}
-                </Text>
+                {hours && (
+                    <Stack>
+                        {(Object.keys(hours) as Array<keyof Hours>).map((day) => (
+                            <Text key={day} textStyle="sm" fontWeight="light" letterSpacing="tight">
+                                {day} {(hours[day] as string[]).map((hour) => hour)}
+                            </Text>
+                        ))}
+                    </Stack>
+                )}
             </Card.Body>
             <CardFooter gap="2">
                 <Button variant="subtle" colorPalette="blue" flex="1">
