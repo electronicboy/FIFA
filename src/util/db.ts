@@ -28,7 +28,16 @@ export type Business = {
     zipcode?: string,
     city?: number
     /** This is JSON encoded inside the DB, not sure how this is handled here */
-    hours?: string
+    hours?: Hours
+}
+export type Hours =  {
+    Monday?: Array<string>
+    Tuesday?: Array<string>
+    Wednesday?: Array<string>
+    Thursday?: Array<string>
+    Friday?: Array<string>
+    Saturday?: Array<string>
+    Sunday?: Array<string>
 }
 
 export type Category = {
