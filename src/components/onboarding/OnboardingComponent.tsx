@@ -1,9 +1,8 @@
 "use client";
 import React from 'react';
 import {Button} from "@/components/ui/button";
-import {Box, Card, CardRoot, Center, Container, Dialog, Fieldset, Input, Stack} from "@chakra-ui/react";
+import {Box, Card, CardRoot, Center, Fieldset, Input, Stack} from "@chakra-ui/react";
 import {Field} from "@/components/ui/field";
-import {DialogRoot} from "@/components/ui/dialog";
 
 export default function OnboardingComponent({updateAction}: {
     updateAction: (data: FormData) => Promise<{ success: boolean, error?: string }>
