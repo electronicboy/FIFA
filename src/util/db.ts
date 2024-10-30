@@ -50,3 +50,8 @@ export type Review = {
     comment: string,
     review: number
 }
+
+export type User = {
+    name: string,
+    clerk: string
+}
