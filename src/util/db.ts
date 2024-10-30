@@ -1,4 +1,4 @@
-import { Pool } from "pg";
+import {Pool} from "pg";
 
 let pool: Pool | null;
 
@@ -27,6 +27,7 @@ export type Business = {
     street_address?: string;
     zipcode?: string;
     city?: number;
+    /** This is JSON encoded inside the DB, not sure how this is handled here */
     hours?: Hours;
 };
 
