@@ -1,9 +1,7 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import { ChakraProvider, SimpleGrid, Container } from "@chakra-ui/react";
+import { SimpleGrid, Container } from "@chakra-ui/react";
 import BusinessCard from "@/components/cards/BusinessCard";
 import { Business, db } from "@/util/db";
-import { auth } from "@clerk/nextjs/server";
 
 export default async function businessPage() {
     const database = db();
@@ -33,8 +31,7 @@ export default async function businessPage() {
         <Container maxW="80rem" centerContent>
             <SimpleGrid className="gap-4 min-w-6">
                 {cardInfo.map((data) => {
-                    const { id, name, location, website, phone, logo, image_thumb, image_large, hours } = data;
-                    return <BusinessCard key={id} business={data} />;
+                    return <BusinessCard key={data.id} business={data} />;
                 })}
             </SimpleGrid>
         </Container>
