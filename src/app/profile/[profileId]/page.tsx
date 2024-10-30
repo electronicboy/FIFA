@@ -6,8 +6,10 @@ import { Card } from "@chakra-ui/react"
 
 
 
-export default async function Profile({params}: {params: {profileId: string}}) {
-  const id = !isNaN(Number(params.profileId))? Number(params.profileId): null
+export default async function ProfileId({params}: {params:  Promise<{profileId: string}>}) {
+const profileId = (await params).profileId
+
+  const id = !isNaN(Number(profileId)) ? Number(profileId): null
   if ( id == null ){notFound()}
   //const {userId} = await auth()
   
