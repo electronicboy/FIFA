@@ -11,8 +11,8 @@ export default function SearchComponentBox({locations, categories}: {
     const router = useRouter();
     const path = usePathname();
     const currentQuery = useSearchParams();
-    const [selectedLocations, setselectedLocations] = useState<Array<number>>([]);
-    const [selectedCategories, setselectedCategories] = useState<Array<number>>([]);
+    const [selectedLocations, setSelectedLocations] = useState<Array<number>>([]);
+    const [selectedCategories, setSelectedCategories] = useState<Array<number>>([]);
 
     function updateSelectedLocations(e: ChangeEvent<HTMLInputElement>) {
         const targetNum = Number(e.target.value)
@@ -23,13 +23,13 @@ export default function SearchComponentBox({locations, categories}: {
 
         const newVal = e.target.checked as boolean
         if (newVal) {
-            setselectedLocations(prev => {
+            setSelectedLocations(prev => {
                 const ret = [...prev];
                 ret.push(targetNum)
                 return ret;
             })
         } else {
-            setselectedLocations(prev => {
+            setSelectedLocations(prev => {
                 const ret: Array<number> = [];
                 prev.forEach(val => { if (val != targetNum) { ret.push(val); } });
                 return ret;
@@ -46,13 +46,13 @@ export default function SearchComponentBox({locations, categories}: {
 
         const newVal = e.target.checked as boolean
         if (newVal) {
-            setselectedCategories(prev => {
+            setSelectedCategories(prev => {
                 const ret = [...prev];
                 ret.push(targetNum)
                 return ret;
             })
         } else {
-            setselectedCategories(prev => {
+            setSelectedCategories(prev => {
                 const ret: Array<number> = [];
                 prev.forEach(val => { if (val != targetNum) { ret.push(val); } });
                 return ret;
